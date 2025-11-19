@@ -1,0 +1,20 @@
+---
+interface Props {
+  urls: string[];
+}
+
+const { urls } = Astro.props;
+---
+
+<!-- Create components for mostrated dogs pictures --><!--Let's encapsulate the logic of displaying the dog images in a reusable component.-->
+<div>
+  {
+    urls.map((dogImageUrl: string) => (
+      <img
+        src={dogImageUrl}
+        alt="Random dog"
+        style="max-width:400px;height: auto"
+      />
+    ))
+  }
+</div>
