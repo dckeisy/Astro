@@ -2,9 +2,10 @@
 const title = "hello world";
 const imageError =
   "https://www.publicdomainpictures.net/pictures/190000/nahled/sad-dog-1468499671wYW.jpg";
-const res = await fetch("https://dog.ceo/api/breeds/image/random");
+// Work with collections, the fetch API, returns 5 random dog images
+const res = await fetch("https://dog.ceo/api/breeds/image/random/5");
 const response = await res.json();
-const dogImageUrl = response.message ?? imageError;
+const dogImageUrls = response.message ?? [imageError];
 ---
 
 <html lang="en">
@@ -17,11 +18,18 @@ const dogImageUrl = response.message ?? imageError;
   </head>
   <body>
     <h1>{title}</h1>
-    <img
-      src={dogImageUrl}
-      alt="Random dog"
-      style="max-width:400px;height: auto"
-    />
+    <div>
+      {
+        dogImageUrls.map((dogImageUrl: string) => (
+          <img
+            src={dogImageUrl}
+            alt="Random dog"
+            style="max-width:400px;height: auto"
+          />
+        ))
+      }
+    </div>
+
     <div>
       <button id="cat-image-button">Get Cat Image </button>
     </div>
