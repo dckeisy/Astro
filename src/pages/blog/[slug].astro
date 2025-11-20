@@ -1,0 +1,39 @@
+---
+import type { GetStaticPaths } from "astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+/**
+ * Genera todas las rutas estáticas del blog en función de los archivos
+ * encontrados dentro de la colección `postCollection`.
+ *
+ * Cada entrada produce un `slug`, que se utiliza para construir la URL final
+ * del post. Además, se pasan los datos completos del post a la página mediante `props`.
+ */
+export async function getStaticPaths() {
+  const posts = await getCollection("postCollection");
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+/**
+ * `post.render()` procesa el archivo Markdown de forma segura y devuelve
+ * tanto el componente de contenido como los metadatos asociados al post.
+ *
+ * El componente `Content` contiene el HTML generado, listo para ser renderizado
+ * dentro de la plantilla.
+ */
+const { Content } = await post.render();
+---
+
+<BaseLayout title={post.data.title}>
+  <h1>{post.data.title}</h1>
+  <img src={post.data.image} alt={post.data.title} />
+  <p>{post.data.description}</p>
+  <article>
+    <Content />
+  </article>
+</BaseLayout>
